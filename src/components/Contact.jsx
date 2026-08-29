@@ -9,11 +9,11 @@ export function Contact() {
   return (
     <Section id="contact" className="pb-12 border-t border-zinc-200 dark:border-zinc-800">
       <div className="flex flex-col items-center justify-center text-center">
-        
+
         {/* Tiny avatar */}
         <div className="w-16 h-16 rounded-full overflow-hidden border border-zinc-200 dark:border-zinc-800 mb-6 group cursor-pointer">
-          <img 
-            src={personalInfo.photo} 
+          <img
+            src={personalInfo.photo}
             alt={personalInfo.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 grayscale group-hover:grayscale-0"
           />

@@ -1,3 +1,5 @@
+import profileImage from "../asset/profile.jpg";
+
 export const personalInfo = {
   name: "Hitesh Bhatnagar",
   shortName: "Hitesh",
@@ -5,7 +7,7 @@ export const personalInfo = {
   githubUrl: "https://github.com/hiteshbhatnagar",
   linkedinUrl: "https://linkedin.com/in/hiteshbhatnagar",
   email: "hiteshbhatnagar@example.com",
-  photo: "/profile.jpg"
+  photo: profileImage
 };
 
 export const identity = {

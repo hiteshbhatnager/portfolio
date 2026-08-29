@@ -11,9 +11,9 @@ export function Hero() {
     <section className="relative min-h-[100vh] flex items-center pt-20 overflow-hidden">
       <div className="container mx-auto px-6 max-w-5xl relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-center">
-          
+
           {/* Photo Section (Asymmetric left on desktop) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -21,8 +21,8 @@ export function Hero() {
           >
             <div className="relative w-48 h-48 md:w-72 md:h-72 rounded-full md:rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-2xl shadow-zinc-200/50 dark:shadow-black/50 group">
               <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-800 animate-pulse -z-10"></div>
-              <img 
-                src={personalInfo.photo} 
+              <img
+                src={personalInfo.photo}
                 alt={personalInfo.name}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -39,8 +39,8 @@ export function Hero() {
             >
               Hi, I'm {personalInfo.shortName}
             </motion.div>
-            
-            <motion.h1 
+
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
@@ -49,7 +49,7 @@ export function Hero() {
               {personalInfo.headline}
             </motion.h1>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.3 }}
@@ -62,8 +62,8 @@ export function Hero() {
                 </span>
               ))}
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.4 }}
@@ -76,9 +76,9 @@ export function Hero() {
                 <span>View Work</span>
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </a>
-              
+
               <div className="w-px h-4 bg-zinc-300 dark:bg-zinc-700 hidden md:block"></div>
-              
+
               <div className="flex items-center gap-4">
                 <a href={personalInfo.githubUrl} target="_blank" rel="noopener noreferrer" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors" aria-label="GitHub">
                   <Github className="w-5 h-5" />
