@@ -25,7 +25,7 @@ export function Contact() {
 
   return (
     <Section id="contact" className="py-20 md:py-32">
-      <div className="relative rounded-[2rem] bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 p-8 md:p-16 overflow-hidden">
+      <div className="relative rounded-[1.5rem] md:rounded-[2rem] bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 p-6 sm:p-8 md:p-16 overflow-hidden">
         {/* Subtle Background Texture inside the card */}
         <div 
           className="absolute inset-0 pointer-events-none opacity-[0.03] dark:opacity-[0.02] mix-blend-multiply dark:mix-blend-lighten"
@@ -46,7 +46,7 @@ export function Contact() {
               <span className="text-[10px] font-bold tracking-wider text-zinc-600 dark:text-zinc-400 uppercase">Available to connect</span>
             </div>
 
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-zinc-900 dark:text-white leading-[1.1] mb-6">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-zinc-900 dark:text-white leading-[1.1] mb-5 md:mb-6">
               Let's build<br />something interesting.
             </h2>
             
@@ -63,7 +63,7 @@ export function Contact() {
                 onMouseLeave={() => setCursorType("default")}
                 whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
                 whileTap={{ scale: 0.97 }}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors min-h-[52px]"
               >
                 Start a conversation ↗
               </motion.a>
@@ -81,12 +81,13 @@ export function Contact() {
                   rel="noopener noreferrer"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
-                  className="group flex items-center justify-between py-6 border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/20 px-4 -mx-4 rounded-xl transition-colors"
+                  className="group flex items-center justify-between py-5 md:py-6 border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/20 px-4 -mx-4 rounded-xl transition-colors min-h-[60px]"
                 >
-                  <span className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:translate-x-2 transition-transform duration-300">
+                  <span className="text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:translate-x-2 transition-transform duration-300">
                     {link.name}
                   </span>
-                  <ArrowRight className="w-5 h-5 text-zinc-400 dark:text-zinc-600 -translate-x-2 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-zinc-900 dark:group-hover:text-white transition-all duration-300" />
+                  {/* Arrow always visible on mobile (no hover on touch), hidden until hover on desktop */}
+                  <ArrowRight className="w-5 h-5 text-zinc-400 dark:text-zinc-600 opacity-40 md:opacity-0 md:-translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-zinc-900 dark:group-hover:text-white transition-all duration-300" />
                 </motion.a>
               ))}
             </div>

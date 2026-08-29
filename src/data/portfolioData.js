@@ -7,8 +7,9 @@ import caffe from "../asset/caffe.png"
 export const personalInfo = {
   name: "Hitesh Bhatnagar",
   shortName: "Hitesh",
-  headline: "Developer who learns by building.",
-  githubUrl: "https://github.com/hiteshbhatnager",
+  headline: "I build what I learn.",
+  subheadline: "Developer · Student · Builder",
+  githubUrl: "https://github.com/hiteshbhatnagar",
   linkedinUrl: "https://linkedin.com/in/hiteshbhatnagar",
   instagramUrl: "https://instagram.com/hitesh.6268",
   whatsappUrl: "https://wa.me/919518827898",
@@ -18,7 +19,13 @@ export const personalInfo = {
 
 export const identity = {
   labels: ["Developer", "Student", "Builder", "Learner"],
-  summary: "I learn by building."
+  summary: "I learn by building.",
+  status: [
+    { label: "Currently", value: "Building projects" },
+    { label: "Learning", value: "React + Java" },
+    { label: "Exploring", value: "Backend & Systems" },
+    { label: "Approach", value: "Learn → Build → Improve" },
+  ]
 };
 
 export const howILearn = ["LEARN", "BUILD", "BREAK", "FIX", "UNDERSTAND", "REPEAT"];
@@ -26,14 +33,17 @@ export const howILearn = ["LEARN", "BUILD", "BREAK", "FIX", "UNDERSTAND", "REPEA
 export const skills = [
   {
     category: "Languages",
+    tag: "USE",
     items: ["Java", "JavaScript", "HTML", "CSS"]
   },
   {
     category: "Building With",
+    tag: "USE",
     items: ["React", "APIs", "Git", "GitHub"]
   },
   {
     category: "Exploring",
+    tag: "LEARNING",
     items: ["Backend", "Systems", "Advanced Java"]
   }
 ];

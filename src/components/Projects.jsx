@@ -44,9 +44,12 @@ export function Projects() {
       />
       
       <div className="flex items-end justify-between mb-12 relative z-10">
-        <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">
-          Work
-        </h2>
+        <div>
+          <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase block mb-3">What I've Built</span>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            Work
+          </h2>
+        </div>
         <span className="text-sm font-bold text-zinc-400 mb-2">0{projects.length}</span>
       </div>
 
