@@ -1,4 +1,8 @@
 import profileImage from "../asset/profile.jpg";
+import movie from "../asset/movie.png"
+import githubImg from "../asset/githubUser.png"
+import expense from "../asset/expense.png"
+import caffe from "../asset/caffe.png"
 
 export const personalInfo = {
   name: "Hitesh Bhatnagar",
@@ -6,6 +10,8 @@ export const personalInfo = {
   headline: "Developer who learns by building.",
   githubUrl: "https://github.com/hiteshbhatnagar",
   linkedinUrl: "https://linkedin.com/in/hiteshbhatnagar",
+  instagramUrl: "https://instagram.com/hitesh.6268",
+  whatsappUrl: "https://wa.me/919518827898",
   email: "hiteshbhatnagar@example.com",
   photo: profileImage
 };
@@ -38,41 +44,36 @@ export const projects = [
     name: "Movie Search",
     description: "Search movies using an API.",
     technologies: ["React", "API", "JavaScript"],
-    githubUrl: "#",
-    demoUrl: "#",
-    image: "/movie-placeholder.jpg"
+    githubUrl: "https://github.com/hiteshbhatnager/movie-search",
+    demoUrl: "https://hiteshbhatnager.github.io/movie-search/",
+    image: movie
   },
   {
     id: 2,
     name: "GitHub User Finder",
     description: "Explore GitHub users and profiles.",
     technologies: ["JavaScript", "CSS", "GitHub API"],
-    githubUrl: "#",
-    demoUrl: "#",
-    image: "/github-placeholder.jpg"
+    githubUrl: "https://github.com/hiteshbhatnager/github-user-finder",
+    demoUrl: "https://github-user-finder-git-main-hitesh24.vercel.app/",
+    image: githubImg
   },
   {
-    id: 3,
-    name: "Password Generator",
-    description: "Generate secure passwords.",
-    technologies: ["JavaScript", "DOM", "CSS"],
-    githubUrl: "#",
-    demoUrl: "#",
-    image: "/password-placeholder.jpg"
-  }
+    id: 4,
+    name: "Expense Tracker",
+    description: "Explore tracker and manage expenses.",
+    technologies: ["JavaScript", "CSS", "GitHub API", "deploy vercel"],
+    githubUrl: "https://github.com/hiteshbhatnager/expense-tracker",
+    demoUrl: "https://expense-tracker-hitesh24.vercel.app/",
+    image: expense
+  },
+  {
+    id: 5,
+    name: "cafe website",
+    description: "makes you appear on internet.",
+    technologies: ["JavaScript", "CSS", "GitHub API"],
+    githubUrl: "https://github.com/hiteshbhatnager/cafe-website",
+    demoUrl: "https://hiteshbhatnager.github.io/cafe-website/",
+    image: caffe
+  },
 ];
 
-export const journeySteps = [
-  { stage: "01", description: "Programming fundamentals" },
-  { stage: "02", description: "Web development" },
-  { stage: "03", description: "React & APIs" },
-  { stage: "04", description: "Java" },
-  { stage: "05", description: "Real-world projects" },
-  { stage: "06", description: "What's next?" }
-];
-
-export const goals = {
-  now: { label: "Build", detail: "Better software" },
-  next: { label: "Deepen", detail: "Stronger fundamentals" },
-  later: { label: "Create", detail: "Bigger projects" }
-};

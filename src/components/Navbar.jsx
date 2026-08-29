@@ -2,10 +2,14 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { personalInfo } from "../data/portfolioData";
 import { cn } from "./Section";
+import { motion, useReducedMotion } from "framer-motion";
+import { useCursor } from "../context/CursorContext";
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { setCursorType } = useCursor();
+  const shouldReduceMotion = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -14,10 +18,15 @@ export function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Work", href: "#work" },
-    { name: "Journey", href: "#journey" },
+    { name: "Home", href: "#hero" },
+    { name: "About", href: "#about" },
+    { name: "Skills", href: "#skills" },
+    { name: "Projects", href: "#work" },
     { name: "Contact", href: "#contact" },
   ];
+
+  const handleMouseEnter = () => setCursorType("link");
+  const handleMouseLeave = () => setCursorType("default");
 
   return (
     <header
@@ -29,7 +38,12 @@ export function Navbar() {
       )}
     >
       <div className="container mx-auto px-6 max-w-5xl flex items-center justify-between">
-        <a href="#" className="font-bold text-lg tracking-tight text-zinc-900 dark:text-white hover:opacity-80 transition-opacity">
+        <a 
+          href="#hero" 
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          className="font-bold text-lg tracking-tight text-zinc-900 dark:text-white hover:opacity-80 transition-opacity"
+        >
           {personalInfo.shortName}
         </a>
 
@@ -38,12 +52,15 @@ export function Navbar() {
           <ul className="flex items-center gap-8">
             {navLinks.map((link) => (
               <li key={link.name}>
-                <a
+                <motion.a
                   href={link.href}
-                  className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                  whileHover={!shouldReduceMotion ? { y: -1 } : {}}
+                  className="inline-block text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
                 >
                   {link.name}
-                </a>
+                </motion.a>
               </li>
             ))}
           </ul>

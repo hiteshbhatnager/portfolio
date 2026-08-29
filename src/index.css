@@ -29,8 +29,20 @@
   * {
     @apply border-[hsl(var(--border))];
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased font-sans selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black;
+  }
+
+  /* Hide default cursor on devices with fine pointer, unless they prefer reduced motion */
+  @media (pointer: fine) {
+    @media (prefers-reduced-motion: no-preference) {
+      *, *::before, *::after {
+        cursor: none !important;
+      }
+    }
   }
 }
 
