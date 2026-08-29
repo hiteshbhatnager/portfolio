@@ -8,7 +8,7 @@ export const personalInfo = {
   name: "Hitesh Bhatnagar",
   shortName: "Hitesh",
   headline: "Developer who learns by building.",
-  githubUrl: "https://github.com/hiteshbhatnagar",
+  githubUrl: "https://github.com/hiteshbhatnager",
   linkedinUrl: "https://linkedin.com/in/hiteshbhatnagar",
   instagramUrl: "https://instagram.com/hitesh.6268",
   whatsappUrl: "https://wa.me/919518827898",

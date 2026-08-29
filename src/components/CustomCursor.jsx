@@ -104,6 +104,13 @@ export function CustomCursor() {
       border: "1px solid rgba(255, 255, 255, 1)",
       mixBlendMode: "normal"
     },
+    cta: {
+      width: 90,
+      height: 90,
+      backgroundColor: "rgba(255, 255, 255, 0.95)",
+      border: "1px solid rgba(255, 255, 255, 1)",
+      mixBlendMode: "normal"
+    },
     image: {
       width: 64,
       height: 64,
@@ -112,6 +119,8 @@ export function CustomCursor() {
       mixBlendMode: "difference"
     }
   };
+
+  const showText = cursorType === "project" || cursorType === "cta";
 
   return (
     <>
@@ -137,14 +146,14 @@ export function CustomCursor() {
         <motion.span 
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ 
-            opacity: cursorType === "project" ? 1 : 0, 
-            scale: cursorType === "project" ? 1 : 0.5 
+            opacity: showText ? 1 : 0, 
+            scale: showText ? 1 : 0.5 
           }}
           transition={{ duration: 0.2 }}
-          className="text-[10px] font-bold tracking-widest text-zinc-900"
+          className="text-[10px] font-bold tracking-widest text-zinc-900 absolute text-center whitespace-nowrap"
           style={{ mixBlendMode: 'normal' }}
         >
-          VIEW
+          {cursorType === "cta" ? "LET'S GO \u2192" : "VIEW"}
         </motion.span>
       </motion.div>
       
