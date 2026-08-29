@@ -45,6 +45,14 @@ export function Navbar() {
     { name: "Contact", href: "#contact" },
   ];
 
+  // Mobile menu shows only the most important destinations
+  const mobileNavLinks = [
+    { name: "Home", href: "#hero" },
+    { name: "Work", href: "#work" },
+    { name: "About", href: "#about" },
+    { name: "Contact", href: "#contact" },
+  ];
+
   const handleMouseEnter = () => setCursorType("link");
   const handleMouseLeave = () => setCursorType("default");
 
@@ -124,9 +132,9 @@ export function Navbar() {
               </button>
             </div>
 
-            {/* Nav links list */}
+            {/* Nav links list — mobile uses the shorter focused list */}
             <nav className="flex flex-col flex-1 px-6 pt-6 overflow-y-auto">
-              {navLinks.map((link, i) => (
+              {mobileNavLinks.map((link, i) => (
                 <motion.a
                   key={link.name}
                   href={link.href}

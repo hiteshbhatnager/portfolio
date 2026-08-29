@@ -24,7 +24,7 @@ export function Contact() {
   ];
 
   return (
-    <Section id="contact" className="py-20 md:py-32">
+    <Section id="contact" className="py-12 md:py-32">
       <div className="relative rounded-[1.5rem] md:rounded-[2rem] bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 p-6 sm:p-8 md:p-16 overflow-hidden">
         {/* Subtle Background Texture inside the card */}
         <div 
@@ -36,7 +36,7 @@ export function Contact() {
           }}
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-12 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 relative z-10">
           
           {/* LEFT: Heading & CTA */}
           <div className="flex flex-col items-start justify-center">
@@ -50,7 +50,7 @@ export function Contact() {
               Let's build<br />something interesting.
             </h2>
             
-            <p className="text-base text-zinc-500 dark:text-zinc-400 font-medium mb-10 max-w-sm">
+            <p className="text-sm md:text-base text-zinc-500 dark:text-zinc-400 font-medium mb-6 md:mb-10 max-w-sm">
               Have an idea or just want to say hello?
             </p>
 
@@ -97,7 +97,7 @@ export function Contact() {
       </div>
 
       {/* FOOTER */}
-      <div className="mt-20 flex flex-col items-center justify-center text-center gap-4">
+      <div className="mt-10 md:mt-20 flex flex-col items-center justify-center text-center gap-3 md:gap-4">
         <p className="text-sm font-semibold text-zinc-900 dark:text-white">
           Always learning. Always building.
         </p>

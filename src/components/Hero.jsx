@@ -163,7 +163,6 @@ export function Hero() {
                 </motion.a>
               </Magnetic>
 
-              {/* Subtle social icons row */}
               <div className="flex items-center justify-center md:justify-start gap-4 w-full md:w-auto mt-1 md:mt-0 md:ml-2">
                 {[
                   { Icon: Linkedin, url: personalInfo.linkedinUrl, label: "LinkedIn", hoverClass: "hover:text-blue-600 dark:hover:text-blue-400" },
@@ -186,6 +185,17 @@ export function Hero() {
                   </motion.a>
                 ))}
               </div>
+
+              {/* Mobile-only: prominent scroll CTA to jump to Work */}
+              <motion.a
+                href="#work"
+                whileTap={{ scale: 0.96 }}
+                className="md:hidden flex items-center justify-center gap-2 w-full mt-4 py-3 rounded-xl border border-zinc-200 dark:border-zinc-800 text-sm font-semibold text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-zinc-600 transition-all"
+                aria-label="View my work"
+              >
+                <span>View my work</span>
+                <span className="text-zinc-400">↓</span>
+              </motion.a>
             </motion.div>
           </motion.div>
 

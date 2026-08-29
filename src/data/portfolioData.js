@@ -9,11 +9,11 @@ export const personalInfo = {
   shortName: "Hitesh",
   headline: "I build what I learn.",
   subheadline: "Developer · Student · Builder",
-  githubUrl: "https://github.com/hiteshbhatnagar",
-  linkedinUrl: "https://linkedin.com/in/hiteshbhatnagar",
+  githubUrl: "https://github.com/hiteshbhatnager",
+  linkedinUrl: "https://www.linkedin.com/in/hitesh-bhatnager-584662411/",
   instagramUrl: "https://instagram.com/hitesh.6268",
   whatsappUrl: "https://wa.me/919518827898",
-  email: "hiteshbhatnagar@example.com",
+  email: "bhatnagerhitesh@gmail.com",
   photo: profileImage
 };
 

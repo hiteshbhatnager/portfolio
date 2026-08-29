@@ -19,7 +19,10 @@ function App() {
           <Identity />
           <Skills />
           <Projects />
-          <HowILearn />
+          {/* Mindset section — desktop only. Mobile communicates mindset inline in About. */}
+          <div className="hidden md:block">
+            <HowILearn />
+          </div>
           <Contact />
         </main>
       </div>
