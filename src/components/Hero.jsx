@@ -1,16 +1,18 @@
 import { ArrowRight } from "lucide-react";
 import { Github, Linkedin, Instagram, Whatsapp } from "./Icons";
 import { personalInfo } from "../data/portfolioData";
-import { motion, useReducedMotion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useReducedMotion, useMotionValue, useSpring, useTransform, useScroll } from "framer-motion";
 import { useCursor } from "../context/CursorContext";
 import { Magnetic } from "./Magnetic";
+import { useState } from "react";
 import bgTexture from "../asset/bg-texture.jpg";
 
 export function Hero() {
   const shouldReduceMotion = useReducedMotion();
   const { setCursorType } = useCursor();
+  const { scrollY } = useScroll();
 
-  // Parallax tracking
+  // Screen-wide mouse parallax tracking
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -32,7 +34,40 @@ export function Hero() {
   const bgY = useTransform(smoothY, [-1, 1], [-15, 15]);
   
   const photoX = useTransform(smoothX, [-1, 1], [-6, 6]);
-  const photoY = useTransform(smoothY, [-1, 1], [-6, 6]);
+  
+  // Combine mouse-tilt parallax and scroll parallax for the profile picture
+  const photoY = useTransform(
+    [smoothY, scrollY],
+    ([latestSmoothY, latestScrollY]) => {
+      const mouseOffset = latestSmoothY * 6; // range -6 to 6
+      const scrollOffset = latestScrollY * -0.04; // subtle scroll parallax (up to ~30px)
+      return mouseOffset + scrollOffset;
+    }
+  );
+
+  // Local interactive mouse tracking for profile photo depth parallax on hover
+  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
+  const photoHoverX = useMotionValue(0);
+  const photoHoverY = useMotionValue(0);
+  
+  const springPhotoHoverX = useSpring(photoHoverX, { damping: 20, stiffness: 200 });
+  const springPhotoHoverY = useSpring(photoHoverY, { damping: 20, stiffness: 200 });
+
+  const handlePhotoMouseMove = (e) => {
+    if (shouldReduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
+    photoHoverX.set(x * 12); // max 6px shift
+    photoHoverY.set(y * 12);
+  };
+
+  const handlePhotoMouseLeave = () => {
+    photoHoverX.set(0);
+    photoHoverY.set(0);
+    setIsPhotoHovered(false);
+    setCursorType("default");
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -86,18 +121,40 @@ export function Hero() {
             style={{ x: photoX, y: photoY }}
           >
             <motion.div 
-              onMouseEnter={() => setCursorType("image")}
-              onMouseLeave={() => setCursorType("default")}
+              onMouseMove={handlePhotoMouseMove}
+              onMouseEnter={() => { setCursorType("image"); setIsPhotoHovered(true); }}
+              onMouseLeave={handlePhotoMouseLeave}
               whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
-              transition={{ duration: 0.4, ease: "easeOut" }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
               className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-72 md:h-72 rounded-full md:rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-200/50 dark:shadow-black/50 group cursor-pointer"
             >
               <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-800 animate-pulse -z-10"></div>
-              <img
+              
+              {/* Photo Image Layer (shifts slightly in opposite direction of mouse for parallax window effect) */}
+              <motion.img
                 src={personalInfo.photo}
                 alt={personalInfo.name}
                 className="w-full h-full object-cover"
+                style={{
+                  x: useTransform(springPhotoHoverX, (v) => -v * 0.4),
+                  y: useTransform(springPhotoHoverY, (v) => -v * 0.4),
+                  scale: isPhotoHovered && !shouldReduceMotion ? 1.04 : 1
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
               />
+
+              {/* Decorative sliding ring layer */}
+              {!shouldReduceMotion && (
+                <motion.div
+                  className="absolute inset-0 rounded-full md:rounded-3xl border border-zinc-900/10 dark:border-white/10 pointer-events-none"
+                  style={{
+                    x: useTransform(springPhotoHoverX, (v) => v * 0.6),
+                    y: useTransform(springPhotoHoverY, (v) => v * 0.6),
+                    scale: isPhotoHovered ? 1.02 : 1
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                />
+              )}
             </motion.div>
           </motion.div>
 
@@ -139,11 +196,12 @@ export function Hero() {
                   onMouseEnter={() => setCursorType("link")}
                   onMouseLeave={() => setCursorType("default")}
                   whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
-                  whileTap={{ scale: 0.97 }}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-700 dark:hover:bg-zinc-100 transition-colors"
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                  className="group inline-flex items-center gap-2 px-6 py-3 bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-700 dark:hover:bg-zinc-100 transition-colors"
                 >
                   View Work
-                  <ArrowRight className="w-4 h-4" />
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </motion.a>
               </Magnetic>
 
@@ -155,7 +213,8 @@ export function Hero() {
                   onMouseEnter={() => setCursorType("link")}
                   onMouseLeave={() => setCursorType("default")}
                   whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
-                  whileTap={{ scale: 0.97 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-300 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-50 dark:hover:bg-zinc-900 transition-colors"
                 >
                   <Github className="w-4 h-4" />
@@ -180,6 +239,7 @@ export function Hero() {
                     onMouseLeave={() => setCursorType("default")}
                     whileHover={!shouldReduceMotion ? { y: -2, scale: 1.1 } : {}}
                     whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                   >
                     <Icon className="w-5 h-5" />
                   </motion.a>

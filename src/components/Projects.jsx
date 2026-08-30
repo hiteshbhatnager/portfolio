@@ -11,17 +11,59 @@ export function Projects() {
   const { setCursorType } = useCursor();
   const shouldReduceMotion = useReducedMotion();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15 }
+  // Premium bouncy spring card transitions with internal staggers
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 25, 
+      scale: shouldReduceMotion ? 1 : 0.98 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1, 
+      transition: { 
+        type: "spring",
+        stiffness: 80,
+        damping: 14,
+        mass: 0.8,
+        staggerChildren: 0.06, // 60ms stagger between child nodes
+        delayChildren: 0.05
+      } 
+    },
+    hover: {
+      y: -4,
+      transition: { type: "spring", stiffness: 300, damping: 20 }
     }
   };
 
-  const itemVariants = {
-    hidden: { opacity: 0, scale: shouldReduceMotion ? 1 : 0.98, y: shouldReduceMotion ? 0 : 20 },
-    visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  const childVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        type: "spring",
+        stiffness: 120,
+        damping: 15
+      } 
+    }
+  };
+
+  // Hover transitions for nested image and arrows
+  const imageHoverVariants = {
+    hover: { 
+      scale: 1.03,
+      transition: { type: "spring", stiffness: 300, damping: 20 }
+    }
+  };
+
+  const arrowHoverVariants = {
+    hover: { 
+      x: 4, 
+      y: -4, 
+      transition: { type: "spring", stiffness: 300, damping: 20 }
+    }
   };
 
   return (
@@ -48,17 +90,14 @@ export function Projects() {
           <span className="text-sm font-bold text-zinc-400 mb-2">0{projects.length}</span>
         </div>
 
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
           {projects.map((project) => (
             <motion.div
-              variants={itemVariants}
-              whileHover={!shouldReduceMotion ? { y: -5 } : {}}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              whileHover="hover"
+              viewport={{ once: true, margin: "-80px" }}
               onClick={() => window.open(project.demoUrl, "_blank")}
               onMouseEnter={() => setCursorType("project")}
               onMouseLeave={() => setCursorType("default")}
@@ -66,20 +105,27 @@ export function Projects() {
               className="group flex flex-col gap-4 cursor-pointer"
             >
               {/* Image Box */}
-              <div className="relative aspect-video w-full rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:border-zinc-300 dark:group-hover:border-zinc-600 group-hover:shadow-xl dark:group-hover:shadow-black/50">
+              <motion.div 
+                variants={childVariants}
+                className="relative aspect-video w-full rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-center justify-center transition-all duration-300 group-hover:border-zinc-300 dark:group-hover:border-zinc-600 group-hover:shadow-xl dark:group-hover:shadow-black/50"
+              >
                 <div className="absolute inset-0 bg-gradient-to-br from-zinc-200 to-zinc-100 dark:from-zinc-800 dark:to-zinc-900 -z-10"></div>
-                <motion.div
-                  className="w-full h-full"
-                  whileHover={!shouldReduceMotion ? { scale: 1.03 } : {}}
-                  transition={{ duration: 0.4, ease: "easeOut" }}
-                >
-                  <img src={project.image} alt={project.name} className="w-full h-full object-cover" />
-                </motion.div>
-              </div>
+                <div className="w-full h-full overflow-hidden">
+                  <motion.img 
+                    variants={imageHoverVariants}
+                    src={project.image} 
+                    alt={project.name} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+              </motion.div>
 
               {/* Info */}
-              <div>
-                <div className="flex items-center justify-between mb-2">
+              <div className="flex flex-col gap-1.5">
+                <motion.div 
+                  variants={childVariants}
+                  className="flex items-center justify-between mb-1"
+                >
                   <h3 className="text-lg font-bold text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                     {project.name}
                   </h3>
@@ -91,17 +137,19 @@ export function Projects() {
                     </Magnetic>
                     <Magnetic>
                       <a href={project.demoUrl} target="_blank" className="text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors block" aria-label="Live Demo">
-                        <ExternalLink className="w-5 h-5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                        <motion.span className="block" variants={arrowHoverVariants}>
+                          <ExternalLink className="w-5 h-5" />
+                        </motion.span>
                       </a>
                     </Magnetic>
                   </div>
-                </div>
+                </motion.div>
 
-                <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
+                <motion.p variants={childVariants} className="text-sm text-zinc-600 dark:text-zinc-400 mb-2">
                   {project.description}
-                </p>
+                </motion.p>
 
-                <div className="flex flex-wrap gap-2">
+                <motion.div variants={childVariants} className="flex flex-wrap gap-2">
                   {project.technologies.map((tech, idx) => (
                     <span
                       key={idx}
@@ -110,14 +158,18 @@ export function Projects() {
                       {tech}
                     </span>
                   ))}
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           ))}
 
           {/* Future Project Card */}
           <motion.div
-            variants={itemVariants}
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            whileHover="hover"
+            viewport={{ once: true, margin: "-80px" }}
             className="group flex flex-col justify-center gap-4 rounded-2xl border border-dashed border-zinc-300 dark:border-zinc-700 bg-transparent p-8 md:aspect-video items-center text-center cursor-default hover:bg-zinc-50 dark:hover:bg-zinc-900/20 transition-colors"
           >
             <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mb-2">
@@ -127,7 +179,7 @@ export function Projects() {
               More experiments coming...
             </span>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
 
       {/* ==================== MOBILE LAYOUT — editorial numbered ==================== */}
@@ -144,28 +196,26 @@ export function Projects() {
         </div>
 
         {/* Project list */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-40px" }}
-          className="flex flex-col gap-10"
-        >
+        <div className="flex flex-col gap-10">
           {projects.map((project, index) => {
             const isFeatured = index === 0;
             return (
               <motion.article
                 key={project.id}
-                variants={itemVariants}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-60px" }}
                 className="flex flex-col gap-3"
               >
                 {/* Project number */}
-                <span className="text-[10px] font-mono font-bold tracking-widest text-zinc-300 dark:text-zinc-700">
+                <motion.span variants={childVariants} className="text-[10px] font-mono font-bold tracking-widest text-zinc-300 dark:text-zinc-700">
                   {String(index + 1).padStart(2, "0")}
-                </span>
+                </motion.span>
 
                 {/* Image — large on mobile */}
                 <motion.div
+                  variants={childVariants}
                   whileTap={!shouldReduceMotion ? { scale: 0.98 } : {}}
                   onClick={() => window.open(project.demoUrl, "_blank")}
                   className={`
@@ -185,24 +235,24 @@ export function Projects() {
                 </motion.div>
 
                 {/* Project name */}
-                <div className="flex items-start justify-between gap-2 mt-1">
+                <motion.div variants={childVariants} className="flex items-start justify-between gap-2 mt-1">
                   <h3 className={`font-bold tracking-tight text-zinc-900 dark:text-white ${isFeatured ? "text-xl" : "text-base"}`}>
                     {project.name}
                   </h3>
-                </div>
+                </motion.div>
 
                 {/* Description */}
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                <motion.p variants={childVariants} className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
                   {project.description}
-                </p>
+                </motion.p>
 
                 {/* Tech tags — compact dot-separated on mobile */}
-                <p className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-600 tracking-wide">
+                <motion.p variants={childVariants} className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-600 tracking-wide">
                   {project.technologies.join(" · ")}
-                </p>
+                </motion.p>
 
                 {/* Always-visible touch-friendly links */}
-                <div className="flex items-center gap-4 pt-1">
+                <motion.div variants={childVariants} className="flex items-center gap-4 pt-1">
                   <a
                     href={project.githubUrl}
                     target="_blank"
@@ -226,7 +276,7 @@ export function Projects() {
                     <span>Live Demo</span>
                     <span className="text-zinc-300 dark:text-zinc-700 text-xs">↗</span>
                   </a>
-                </div>
+                </motion.div>
 
                 {/* Separator (except last) */}
                 {index < projects.length - 1 && (
@@ -238,8 +288,10 @@ export function Projects() {
 
           {/* Future Project — compact mobile version */}
           <motion.div
-            variants={itemVariants}
-            className="flex items-center gap-3 py-4 border-t border-zinc-100 dark:border-zinc-900"
+            variants={cardVariants}
+            initial="hidden"
+            whileInView="visible"
+            className="flex items-center gap-3 py-4 border-t border-t-zinc-100 dark:border-t-zinc-900"
           >
             <div className="w-8 h-8 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center shrink-0">
               <ArrowRight className="w-4 h-4 text-zinc-400" />
@@ -248,7 +300,7 @@ export function Projects() {
               More experiments coming...
             </span>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </Section>
   );

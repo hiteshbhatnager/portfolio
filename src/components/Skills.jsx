@@ -13,6 +13,36 @@ export function Skills() {
   const shouldReduceMotion = useReducedMotion();
   const { setCursorType } = useCursor();
 
+  // Stagger and spring reveal variants
+  const groupVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05, // 50ms stagger
+        delayChildren: 0.05,
+      }
+    }
+  };
+
+  const tagVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: shouldReduceMotion ? 0 : 15, 
+      scale: shouldReduceMotion ? 1 : 0.95 
+    },
+    visible: {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 150,
+        damping: 15,
+      }
+    }
+  };
+
   return (
     <Section id="skills" className="pt-0 md:pt-0">
 
@@ -22,24 +52,25 @@ export function Skills() {
           <span className="text-xs font-bold tracking-widest text-zinc-400 uppercase">What I Use</span>
         </div>
 
-        {/* All "USE" tags in one flowing row */}
+        {/* All "USE" tags in one flowing row with staggers */}
         <motion.div
-          initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 10 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          variants={groupVariants}
+          initial="hidden"
+          whileInView="visible"
           viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
           className="flex flex-wrap gap-2 mb-4"
         >
           {skills
             .filter((g) => g.tag === "USE")
             .flatMap((g) => g.items)
             .map((item) => (
-              <span
+              <motion.span
                 key={item}
+                variants={tagVariants}
                 className="px-3 py-1.5 rounded-lg text-sm font-semibold bg-zinc-100 dark:bg-zinc-800/70 border border-zinc-200 dark:border-zinc-700 text-zinc-800 dark:text-zinc-100 min-h-[36px] flex items-center"
               >
                 {item}
-              </span>
+              </motion.span>
             ))}
         </motion.div>
 
@@ -48,7 +79,7 @@ export function Skills() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, delay: 0.1 }}
+          transition={{ duration: 0.4, delay: 0.15 }}
           className="flex items-center gap-2 flex-wrap"
         >
           <span className="text-[10px] font-bold tracking-widest text-zinc-400 uppercase shrink-0">Exploring</span>
@@ -85,10 +116,10 @@ export function Skills() {
           {skills.map((group, groupIndex) => (
             <motion.div
               key={groupIndex}
-              initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              variants={groupVariants}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.5, delay: groupIndex * 0.1 }}
               className="flex flex-col gap-5"
             >
               {/* Group header */}
@@ -108,11 +139,12 @@ export function Skills() {
                 {group.items.map((item, idx) => (
                   <motion.span
                     key={idx}
+                    variants={tagVariants}
                     onMouseEnter={() => setCursorType("link")}
                     onMouseLeave={() => setCursorType("default")}
-                    whileHover={!shouldReduceMotion ? { scale: 1.05, y: -2 } : {}}
+                    whileHover={!shouldReduceMotion ? { scale: 1.02, y: -2 } : {}}
                     whileTap={{ scale: 0.97 }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 15 }}
                     className={`
                       px-3 py-2 md:py-1.5 rounded-lg text-sm font-semibold cursor-default border
                       transition-shadow duration-300 hover:shadow-sm

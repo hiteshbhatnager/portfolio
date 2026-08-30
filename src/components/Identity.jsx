@@ -1,11 +1,36 @@
 import { Section } from "./Section";
 import { personalInfo, identity } from "../data/portfolioData";
-import { motion, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { useCursor } from "../context/CursorContext";
+import { useState } from "react";
 
 export function Identity() {
   const shouldReduceMotion = useReducedMotion();
   const { setCursorType } = useCursor();
+
+  // Local interactive mouse tracking for profile photo depth parallax on hover
+  const [isPhotoHovered, setIsPhotoHovered] = useState(false);
+  const photoHoverX = useMotionValue(0);
+  const photoHoverY = useMotionValue(0);
+  
+  const springPhotoHoverX = useSpring(photoHoverX, { damping: 20, stiffness: 200 });
+  const springPhotoHoverY = useSpring(photoHoverY, { damping: 20, stiffness: 200 });
+
+  const handlePhotoMouseMove = (e) => {
+    if (shouldReduceMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
+    photoHoverX.set(x * 8); // subtle 4px shift
+    photoHoverY.set(y * 8);
+  };
+
+  const handlePhotoMouseLeave = () => {
+    photoHoverX.set(0);
+    photoHoverY.set(0);
+    setIsPhotoHovered(false);
+    setCursorType("default");
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -94,13 +119,37 @@ export function Identity() {
 
             {/* Photo */}
             <motion.div
-              onMouseEnter={() => setCursorType("image")}
-              onMouseLeave={() => setCursorType("default")}
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              className="w-20 h-20 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 mb-5 cursor-pointer"
+              onMouseMove={handlePhotoMouseMove}
+              onMouseEnter={() => { setCursorType("image"); setIsPhotoHovered(true); }}
+              onMouseLeave={handlePhotoMouseLeave}
+              whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="relative w-20 h-20 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-700 mb-5 cursor-pointer flex items-center justify-center"
             >
-              <img src={personalInfo.photo} alt={personalInfo.name} className="w-full h-full object-cover" />
+              {/* Photo Image Layer (parallax window effect) */}
+              <motion.img 
+                src={personalInfo.photo} 
+                alt={personalInfo.name} 
+                className="w-full h-full object-cover" 
+                style={{
+                  x: useTransform(springPhotoHoverX, (v) => -v * 0.4),
+                  y: useTransform(springPhotoHoverY, (v) => -v * 0.4),
+                  scale: isPhotoHovered && !shouldReduceMotion ? 1.04 : 1
+                }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              />
+              {/* Decorative sliding ring layer */}
+              {!shouldReduceMotion && (
+                <motion.div
+                  className="absolute inset-0 rounded-2xl border border-zinc-900/10 dark:border-white/10 pointer-events-none"
+                  style={{
+                    x: useTransform(springPhotoHoverX, (v) => v * 0.6),
+                    y: useTransform(springPhotoHoverY, (v) => v * 0.6),
+                    scale: isPhotoHovered ? 1.02 : 1
+                  }}
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                />
+              )}
             </motion.div>
 
             <h2 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white mb-1">
@@ -146,7 +195,8 @@ export function Identity() {
             {identity.labels.map((label) => (
               <motion.span
                 key={label}
-                whileHover={!shouldReduceMotion ? { scale: 1.05, y: -2 } : {}}
+                whileHover={!shouldReduceMotion ? { scale: 1.02, y: -2 } : {}}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
                 className="px-4 py-1.5 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-full text-sm font-semibold tracking-wide text-zinc-700 dark:text-zinc-300 cursor-default"
               >
                 {label}
@@ -162,8 +212,8 @@ export function Identity() {
             ].map(({ num, label, sub }) => (
               <motion.div
                 key={num}
-                whileHover={!shouldReduceMotion ? { y: -3 } : {}}
-                transition={{ duration: 0.25 }}
+                whileHover={!shouldReduceMotion ? { y: -4 } : {}}
+                transition={{ type: "spring", stiffness: 300, damping: 18 }}
                 className="flex flex-col gap-1 p-4 rounded-xl border border-zinc-100 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30 group cursor-default"
               >
                 <span className="text-xs font-mono text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">{num}</span>

@@ -10,11 +10,37 @@ export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { setCursorType } = useCursor();
   const shouldReduceMotion = useReducedMotion();
+  const [activeSection, setActiveSection] = useState("hero");
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Section visibility tracking
+  useEffect(() => {
+    const sections = ["hero", "about", "skills", "work", "mindset", "contact"];
+    const observerCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      root: null,
+      rootMargin: "-30% 0px -45% 0px",
+      threshold: 0,
+    });
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   // Close on Escape key
@@ -80,19 +106,35 @@ export function Navbar() {
         {/* Desktop Nav — untouched */}
         <nav className="hidden md:flex items-center gap-8">
           <ul className="flex items-center gap-8">
-            {navLinks.map((link) => (
-              <li key={link.name}>
-                <motion.a
-                  href={link.href}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
-                  whileHover={!shouldReduceMotion ? { y: -1 } : {}}
-                  className="inline-block text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors"
-                >
-                  {link.name}
-                </motion.a>
-              </li>
-            ))}
+            {navLinks.map((link) => {
+              const linkId = link.href.substring(1);
+              const isActive = activeSection === linkId;
+              return (
+                <li key={link.name} className="relative py-1 flex flex-col items-center">
+                  <motion.a
+                    href={link.href}
+                    onMouseEnter={handleMouseEnter}
+                    onMouseLeave={handleMouseLeave}
+                    whileHover={!shouldReduceMotion ? { y: -1 } : {}}
+                    className={cn(
+                      "inline-block text-sm font-medium transition-colors relative z-10",
+                      isActive
+                        ? "text-zinc-900 dark:text-white font-semibold"
+                        : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                    )}
+                  >
+                    {link.name}
+                  </motion.a>
+                  {isActive && !shouldReduceMotion && (
+                    <motion.div
+                      layoutId="activeNavIndicator"
+                      className="absolute bottom-[-4px] left-0 right-0 h-[2px] bg-zinc-900 dark:bg-white rounded-full"
+                      transition={{ type: "spring", stiffness: 350, damping: 25 }}
+                    />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </nav>
 
@@ -134,20 +176,27 @@ export function Navbar() {
 
             {/* Nav links list — mobile uses the shorter focused list */}
             <nav className="flex flex-col flex-1 px-6 pt-6 overflow-y-auto">
-              {mobileNavLinks.map((link, i) => (
-                <motion.a
-                  key={link.name}
-                  href={link.href}
-                  onClick={handleMobileLinkClick}
-                  initial={shouldReduceMotion ? {} : { opacity: 0, x: -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.2 }}
-                  className="flex items-center justify-between py-5 text-2xl font-bold text-zinc-900 dark:text-white border-b border-zinc-100 dark:border-zinc-900 active:opacity-60 transition-opacity"
-                >
-                  <span>{link.name}</span>
-                  <span className="text-zinc-300 dark:text-zinc-700 text-base font-normal">↗</span>
-                </motion.a>
-              ))}
+              {mobileNavLinks.map((link, i) => {
+                const linkId = link.href.substring(1);
+                const isActive = activeSection === linkId;
+                return (
+                  <motion.a
+                    key={link.name}
+                    href={link.href}
+                    onClick={handleMobileLinkClick}
+                    initial={shouldReduceMotion ? {} : { opacity: 0, x: -16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05, duration: 0.2 }}
+                    className={cn(
+                      "flex items-center justify-between py-5 text-2xl font-bold border-b border-zinc-100 dark:border-zinc-900 active:opacity-60 transition-colors",
+                      isActive ? "text-zinc-900 dark:text-white" : "text-zinc-400 dark:text-zinc-600"
+                    )}
+                  >
+                    <span>{link.name}</span>
+                    <span className={cn("transition-transform duration-300", isActive ? "text-zinc-900 dark:text-white translate-x-1" : "text-zinc-300 dark:text-zinc-700")}>↗</span>
+                  </motion.a>
+                );
+              })}
             </nav>
 
             {/* Footer inside menu */}

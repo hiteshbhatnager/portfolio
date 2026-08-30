@@ -23,6 +23,31 @@ export function Contact() {
     { name: "LinkedIn", url: personalInfo.linkedinUrl },
   ];
 
+  // Spring stagger reveals for contact links
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.08,
+        delayChildren: 0.05
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 15 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: "spring",
+        stiffness: 120,
+        damping: 15
+      }
+    }
+  };
+
   return (
     <Section id="contact" className="py-12 md:py-32">
       <div className="relative rounded-[1.5rem] md:rounded-[2rem] bg-zinc-50 dark:bg-zinc-900/30 border border-zinc-200 dark:border-zinc-800/80 p-6 sm:p-8 md:p-16 overflow-hidden">
@@ -39,7 +64,13 @@ export function Contact() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 relative z-10">
           
           {/* LEFT: Heading & CTA */}
-          <div className="flex flex-col items-start justify-center">
+          <motion.div 
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 25 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ type: "spring", stiffness: 80, damping: 14, mass: 0.8 }}
+            className="flex flex-col items-start justify-center"
+          >
             {/* Status Indicator */}
             <div className="flex items-center gap-2 mb-6 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-700 bg-white/50 dark:bg-black/50 backdrop-blur-md">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
@@ -62,25 +93,35 @@ export function Contact() {
                 onMouseEnter={() => setCursorType("cta")}
                 onMouseLeave={() => setCursorType("default")}
                 whileHover={!shouldReduceMotion ? { scale: 1.02 } : {}}
-                whileTap={{ scale: 0.97 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: "spring", stiffness: 400, damping: 15 }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 rounded-full font-bold text-sm tracking-wide hover:bg-zinc-800 dark:hover:bg-zinc-100 transition-colors min-h-[52px]"
               >
                 Start a conversation ↗
               </motion.a>
             </Magnetic>
-          </div>
+          </motion.div>
 
           {/* RIGHT: Contact Links */}
           <div className="flex flex-col justify-center">
-            <div className="flex flex-col border-t border-zinc-200 dark:border-zinc-800">
+            <motion.div 
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-60px" }}
+              className="flex flex-col border-t border-zinc-200 dark:border-zinc-800"
+            >
               {links.map((link) => (
                 <motion.a
                   key={link.name}
                   href={link.url}
+                  variants={itemVariants}
                   target="_blank"
                   rel="noopener noreferrer"
                   onMouseEnter={handleMouseEnter}
                   onMouseLeave={handleMouseLeave}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 18 }}
                   className="group flex items-center justify-between py-5 md:py-6 border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-100/50 dark:hover:bg-zinc-800/20 px-4 -mx-4 rounded-xl transition-colors min-h-[60px]"
                 >
                   <span className="text-base md:text-lg font-semibold text-zinc-900 dark:text-zinc-100 group-hover:translate-x-2 transition-transform duration-300">
@@ -90,7 +131,7 @@ export function Contact() {
                   <ArrowRight className="w-5 h-5 text-zinc-400 dark:text-zinc-600 opacity-40 md:opacity-0 md:-translate-x-2 group-hover:translate-x-0 group-hover:opacity-100 group-hover:text-zinc-900 dark:group-hover:text-white transition-all duration-300" />
                 </motion.a>
               ))}
-            </div>
+            </motion.div>
           </div>
 
         </div>

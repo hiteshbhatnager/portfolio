@@ -140,7 +140,7 @@ export function CustomCursor() {
         }}
         variants={variants}
         animate={cursorType}
-        transition={{ type: "spring", stiffness: 350, damping: 25, mass: 0.5 }}
+        transition={{ type: "spring", stiffness: 380, damping: 18, mass: 0.5 }}
       >
         {/* Project View Text */}
         <motion.span 
@@ -153,7 +153,7 @@ export function CustomCursor() {
           className="text-[10px] font-bold tracking-widest text-zinc-900 absolute text-center whitespace-nowrap"
           style={{ mixBlendMode: 'normal' }}
         >
-          {cursorType === "cta" ? "LET'S GO \u2192" : "VIEW"}
+          {cursorType === "cta" ? "LET'S GO \u2192" : "VIEW \u2197"}
         </motion.span>
       </motion.div>
       
