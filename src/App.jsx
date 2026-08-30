@@ -5,6 +5,7 @@ import { Skills } from "./components/Skills";
 import { Projects } from "./components/Projects";
 import { HowILearn } from "./components/HowILearn";
 import { Contact } from "./components/Contact";
+import { WhatsAppButton } from "./components/WhatsAppButton";
 import { CursorProvider } from "./context/CursorContext";
 import { CustomCursor } from "./components/CustomCursor";
 import { ReactLenis } from "lenis/react";
@@ -74,6 +75,7 @@ function App() {
         </div>
         <Contact />
       </main>
+      <WhatsAppButton />
     </div>
   );
 
